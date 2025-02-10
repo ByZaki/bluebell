@@ -16,9 +16,12 @@
     "@mui/material": "^6.4.2",
     "@mui/styled-engine-sc": "^6.4.2",
     "axios": "^1.7.9",
+    "mobx": "^6.13.6",
+    "mobx-react-lite": "^4.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

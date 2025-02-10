@@ -12,16 +12,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import axios from "axios";
+import { useContext, useState } from "react";
 import logo from "@assets/logo.svg";
-import { validateEmail } from "../utils/validateEmail";
-import { validatePassword } from "../utils/validatePassword";
+import { validateEmail, validatePassword } from "../utils";
+import { Context } from "../main";
 
 export default function Login() {
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const { store } = useContext(Context);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,14 +38,7 @@ export default function Login() {
     if (!isValidEmail) return setErrorEmail(true);
     if (!isValidPassword) return setErrorPassword(true);
 
-    axios
-      .post(`https://67c3a5993a006ed7.mokky.dev/auth`, {
-        email,
-        password,
-      })
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-      });
+    store.login(email, password);
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
