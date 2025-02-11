@@ -1,24 +1,38 @@
-import { makeAutoObservable } from "mobx";
 import AuthService from "../services/AuthService";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-export default class Store {
-  isAuth = false;
+type useStoreType = {
+  isAuth: boolean;
+  setIsAuth: (isAuth: boolean) => void;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; message: string }>;
+};
 
-  constructor() {
-    makeAutoObservable(this);
-  }
+const useStore = create<useStoreType>()(
+  persist(
+    (set) => ({
+      isAuth: false,
 
-  setAuth(bool: boolean) {
-    this.isAuth = bool;
-  }
+      setIsAuth(bool: boolean) {
+        set({ isAuth: bool });
+      },
 
-  async login(email: string, password: string) {
-    try {
-      const response = await AuthService.login(email, password);
-      localStorage.setItem("token", response.data.token);
-      this.setAuth(true);
-    } catch (error: any) {
-      console.log(error.response?.data?.message);
-    }
-  }
-}
+      async login(email: string, password: string) {
+        try {
+          const response = await AuthService.login(email, password);
+          localStorage.setItem("token", response.data.token);
+          set({ isAuth: true });
+          return { success: true, message: "OK" };
+        } catch (error: any) {
+          return { success: false, message: "Email or password wrong" };
+        }
+      },
+    }),
+    { name: "authStore" }
+  )
+);
+
+export default useStore;

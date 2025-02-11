@@ -10,10 +10,13 @@ import {
   Typography,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import SideBar from "../components/SideBar";
 
 export default function Dashboard() {
   return (
     <Stack>
+      <SideBar />
+
       <Breadcrumbs aria-label="breadcrumb">
         <Link underline="hover" color="inherit" href="#">
           Home

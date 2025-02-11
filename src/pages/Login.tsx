@@ -12,19 +12,22 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import logo from "@assets/logo.svg";
 import { validateEmail, validatePassword } from "../utils";
-import { Context } from "../main";
+import useStore from "../store/store";
+import { useNavigate } from "react-router";
 
 export default function Login() {
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { store } = useContext(Context);
+  const login = useStore((state) => state.login);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -38,7 +41,13 @@ export default function Login() {
     if (!isValidEmail) return setErrorEmail(true);
     if (!isValidPassword) return setErrorPassword(true);
 
-    store.login(email, password);
+    const { success, message } = await login(email, password);
+
+    console.log(message);
+
+    if (success) {
+      navigate("/");
+    }
   };
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);

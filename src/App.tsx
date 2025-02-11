@@ -1,36 +1,32 @@
 // import Dashboard from "./pages/Dashboard";
-import { Route, Routes, useNavigate, useNavigation } from "react-router";
+import { Route, Routes, useNavigate } from "react-router";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import { useContext, useEffect } from "react";
-import { Context } from "./main";
-import { observe } from "mobx";
+import { useEffect } from "react";
+import useStore from "./store/store";
 
 function App() {
-  const { store } = useContext(Context);
+  const auth = useStore((state) => state.isAuth);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!store.isAuth) {
+    if (!auth) {
       navigate("/login");
     }
-  }, [store.isAuth]);
+  }, [auth]);
 
-  if (store.isAuth) {
-    return (
-      <Routes>
-        <Route index element={<Dashboard />} />
-      </Routes>
-    );
-  }
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        {auth ? (
+          <Route index element={<Dashboard />} />
+        ) : (
+          <Route path="/login" element={<Login />} />
+        )}
       </Routes>
     </>
   );
 }
 
-export default observe(App);
+export default App;

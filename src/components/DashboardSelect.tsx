@@ -6,10 +6,12 @@ import {
   Select,
   Stack,
 } from "@mui/material";
+import SideBar from "./SideBar";
 
 export default function DashboardSelect() {
   return (
     <Stack>
+      <SideBar />
       <FormControl>
         <InputLabel>
           <CalendarMonthIcon />
