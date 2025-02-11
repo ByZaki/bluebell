@@ -1,8 +1,8 @@
-// import Dashboard from "./pages/Dashboard";
-import { Route, Routes, useNavigate } from "react-router";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router";
+import MainLayout from "./layouts/MainLayout";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
 import useStore from "./store/store";
 
 function App() {
@@ -20,7 +20,9 @@ function App() {
     <>
       <Routes>
         {auth ? (
-          <Route index element={<Dashboard />} />
+          <Route element={<MainLayout />}>
+            <Route index element={<Dashboard />} />
+          </Route>
         ) : (
           <Route path="/login" element={<Login />} />
         )}

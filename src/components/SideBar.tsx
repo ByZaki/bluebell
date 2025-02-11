@@ -1,15 +1,15 @@
+import logo from "@assets/logo.svg";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PieChartIcon from "@mui/icons-material/PieChart";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import SettingsIcon from "@mui/icons-material/Settings";
 import Box from "@mui/material/Box";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import logo from "@assets/logo.svg";
-import PieChartIcon from "@mui/icons-material/PieChart";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { NavLink } from "react-router";
 
 export default function SideBar() {
@@ -23,6 +23,7 @@ export default function SideBar() {
           display: "flex",
           flexDirection: "column",
           padding: 2,
+          borderRight: "1px solid #ccc",
         }}
         role="presentation"
       >
