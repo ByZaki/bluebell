@@ -2,14 +2,14 @@ import PageHeader from "../components/PageHeader";
 import CustomBreadcrumbs from "../components/CustomBreadcrumbs";
 import { Stack } from "@mui/material";
 
-export default function Dashboard() {
+export default function Technician() {
   return (
     <>
       <Stack>
-        <CustomBreadcrumbs>Dashboard</CustomBreadcrumbs>
-        <PageHeader title="Dashboard" />
+        <CustomBreadcrumbs>Technician</CustomBreadcrumbs>
+        <PageHeader title="Technician" />
 
-        <Stack>Dashboard</Stack>
+        <Stack>Technician</Stack>
       </Stack>
     </>
   );
