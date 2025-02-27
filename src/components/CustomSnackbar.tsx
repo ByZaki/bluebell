@@ -3,27 +3,27 @@ import { Alert, AlertTitle } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 
 export default function CustomSnackbar() {
-  const snackbar = useSnackbarStore();
+  const toast = useSnackbarStore();
 
   const handleClose = () => {
-    snackbar.setSnackbar({ ...snackbar, show: false });
+    toast.setSnackbar({ ...toast, show: false });
   };
 
   return (
     <>
       <Snackbar
-        open={snackbar.show}
+        open={toast.show}
         autoHideDuration={3000}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={handleClose}
-          severity={snackbar.severity}
+          severity={toast.severity}
           sx={{ width: "100%" }}
         >
-          <AlertTitle>{snackbar.title}</AlertTitle>
-          {snackbar.message}
+          <AlertTitle>{toast.title}</AlertTitle>
+          {toast.message}
         </Alert>
       </Snackbar>
     </>

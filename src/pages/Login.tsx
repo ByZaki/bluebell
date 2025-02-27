@@ -35,11 +35,10 @@ export default function Login() {
     const email = formData.get("email")?.toString() ?? "";
     const password = formData.get("password")?.toString() ?? "";
 
-    const isValidEmail = validateEmail(email);
+    const isValidEmail = validateEmail(email, setErrorEmail);
     const isValidPassword = validatePassword(password);
 
-    if (!isValidEmail) return setErrorEmail(true);
-    if (!isValidPassword) return setErrorPassword(true);
+    if (!isValidEmail || !isValidPassword) return;
 
     const { success, message } = await login(email, password);
 

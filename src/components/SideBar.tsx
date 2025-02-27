@@ -1,153 +1,121 @@
-import logo from "@assets/logo.svg";
-import Box from "@mui/material/Box";
+import SideLogo from "@assets/SideLogo.svg";
+import { SIDEBARLIST } from "../consts/SIDEBARLIST";
+import { useNavigate, useLocation } from "react-router";
+import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { useNavigationStore } from "../store/useNavigationStore";
+import { SidebarListType } from "../types/SidebarListType";
+import { cloneElement, FC, isValidElement, useEffect } from "react";
+
+type HandleChangeType = (index: number) => void;
 
 export default function SideBar() {
+  const { navigation, setNavigation } = useNavigationStore();
+  const sidebarAllList = [...SIDEBARLIST[0], ...SIDEBARLIST[1]];
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const activeItem = sidebarAllList.find(
+      (item) => item.link?.slice(1) === location.pathname.split("/")[1]
+    );
+    setNavigation(activeItem || sidebarAllList[0]);
+  }, [location, setNavigation]);
+
+  const handleChange: HandleChangeType = (index) => {
+    const checked = sidebarAllList[index];
+
+    if (checked?.link) {
+      navigate(checked.link);
+    }
+  };
+
   return (
-    <>
-      <Box width={220} height="100vh" borderRight={`1px solid #ccc`}>
-        <img
-          src={logo}
-          width="100%"
-          height="160px"
-          style={{ padding: "10px 20px 0", objectFit: "contain" }}
+    <Box width={220} height="100vh" borderRight={`1px solid #ccc`}>
+      <Stack borderBottom={`1px solid #ccc`} padding="15px 20px">
+        <img src={SideLogo} width="82px" height="30px" alt="Logo" />
+      </Stack>
+      <Box padding="10px 0" borderBottom={`1px solid #ccc`}>
+        <SidebarTabs
+          tabs={SIDEBARLIST[0]}
+          navigation={navigation}
+          handleChange={handleChange}
         />
-        <Box padding="10px 0" borderBottom={`1px solid #ccc`}>
-          {/* <SidebarTabs
-            tabs={menu[0]}
-            navigation={navigation}
-            handleChange={handleChange}
-          /> */}
-          asdasd
-        </Box>
-        <Box padding="10px 0">
-          {/* <SidebarTabs
-            tabs={menu[1]}
-            count={menu[0].length}
-            navigation={navigation}
-            handleChange={handleChange}
-          /> */}
-          asdasd
-        </Box>
       </Box>
-      {/* <Box
-        sx={{
-          height: "100vh",
-          width: 220,
-          bgcolor: "background.paper",
-          display: "flex",
-          flexDirection: "column",
-          padding: 2,
-          borderRight: "1px solid #ccc",
-        }}
-        role="presentation"
-      > */}
-      {/* <Box padding="10px 0" borderBottom={`1px solid #ccc`}>  
-          <Tabs
-            orientation="vertical"
-            variant="scrollable"
-            value={false}
-            TabIndicatorProps={{ style: { backgroundColor: "transparent" } }}
-            sx={{ gap: "0", minWidth: "100%" }}
-          >
-            <Tab
-              sx={{
-                padding: "10px 20px",
-                textTransform: "none",
-                alignItems: "start",
-              }}
-
-              // label={}
-            />
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <Stack width={16} height={16} alignItems="center"></Stack>
-              <Typography
-                variant="body2"
-                component="span"
-                fontWeight={500}
-                // color={
-                //   navigation?.link === item?.link
-                //     ? COLORS.MAIN_PRIMARY
-                //     : COLORS.DARK_2
-                // }
-              >
-                Dashboard
-              </Typography>
-            </Stack>
-          </Tabs>
-        </Box> */}
-
-      {/* <ListItem disablePadding>
-          <img
-            src={logo}
-            width="70%"
-            style={{ padding: "10px 20px 20px", objectFit: "contain" }}
-          />
-        </ListItem> */}
-
-      {/* <List>
-          <ListItem disablePadding>
-            <NavLink
-              to="/"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-                fontSize: "14px",
-              }}
-            >
-              <ListItemButton>
-                <PieChartIcon sx={{ color: "#5F6165" }} />
-                <ListItemText primary="Dashboard" />
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <NavLink
-              to="/technician"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-              }}
-            >
-              <ListItemButton>
-                <ManageAccountsIcon sx={{ color: "#5F6165" }} />
-                <ListItemText primary="Technician" />
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-        </List>
-
-        <List>
-          <ListItem disablePadding>
-            <NavLink
-              to="/settings"
-              style={{
-                textDecoration: "none",
-                color: "inherit",
-                width: "100%",
-              }}
-            >
-              <ListItemButton>
-                <ListItemIcon sx={{ minWidth: "30px" }}>
-                  <SettingsIcon />
-                </ListItemIcon>
-                <ListItemText primary="Admin setting" />
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: "30px" }}>
-                <PowerSettingsNewIcon />
-              </ListItemIcon>
-              <ListItemText primary="Log out" />
-            </ListItemButton>
-          </ListItem>
-        </List> */}
-      {/* </Box> */}
-    </>
+      <Box padding="10px 0">
+        <SidebarTabs
+          tabs={SIDEBARLIST[1]}
+          count={SIDEBARLIST[0].length}
+          navigation={navigation}
+          handleChange={handleChange}
+        />
+      </Box>
+    </Box>
   );
 }
+
+type SidebarTabsProps = {
+  tabs: SidebarListType[];
+  navigation: SidebarListType;
+  handleChange: HandleChangeType;
+  count?: number;
+};
+
+const SidebarTabs: FC<SidebarTabsProps> = ({
+  tabs,
+  navigation,
+  handleChange,
+  count,
+}) => {
+  return (
+    <Tabs
+      orientation="vertical"
+      variant="scrollable"
+      value={Math.max(
+        0,
+        tabs.findIndex((tab) => tab.link === navigation.link)
+      )}
+      TabIndicatorProps={{ style: { backgroundColor: "transparent" } }}
+      sx={{ gap: "0", minWidth: "100%" }}
+    >
+      {tabs.map((item, index) => (
+        <Tab
+          key={item.id}
+          onClick={() => handleChange((count ?? 0) + index)}
+          sx={{
+            paddingY: "10px",
+            textTransform: "none",
+            alignItems: "start",
+            justifyContent: "start",
+          }}
+          label={<SidebarTabsItem item={item} navigation={navigation} />}
+        />
+      ))}
+    </Tabs>
+  );
+};
+
+type SidebarTabsItemProps = {
+  item: SidebarListType;
+  navigation: SidebarListType;
+};
+
+const SidebarTabsItem: FC<SidebarTabsItemProps> = ({ item, navigation }) => {
+  return (
+    <Stack direction="row" alignItems="center" spacing={1}>
+      <Stack width={16} height={16} alignItems="center">
+        {isValidElement(item.icon) &&
+          cloneElement(item.icon as React.ReactElement<{ fill: string }>, {
+            fill: navigation.link === item?.link ? "#0760A0" : "#5F6165",
+          })}
+      </Stack>
+      <Typography
+        variant="body2"
+        component="span"
+        fontWeight={500}
+        color={navigation?.link === item?.link ? "#0760A0" : "#5F6165"}
+      >
+        {item.title}
+      </Typography>
+    </Stack>
+  );
+};

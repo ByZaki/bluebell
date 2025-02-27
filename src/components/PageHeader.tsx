@@ -1,51 +1,89 @@
 import {
-  FormControl,
-  IconButton,
-  InputLabel,
+  Button,
+  Divider,
+  Menu,
   MenuItem,
-  Select,
   Stack,
   Typography,
 } from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
 import { useState } from "react";
-
+import LogoutIcon from "@mui/icons-material/Logout";
+import useStore from "../store/store";
+import LogoutModal from "./LogoutModal";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 interface ITitle {
   title: string;
 }
 
 export default function PageHeader({ title }: ITitle) {
-  const [notifications, setNotifications] = useState(true);
+  const [select, setSelect] = useState<null | HTMLElement>(null);
+  const [logoutModal, setLogoutModal] = useState<boolean>(false);
+  const user = useStore((state) => state.user);
+
+  const adminName = user ? user.data.full_name : "Unknown User";
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setSelect(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setSelect(null);
+  };
 
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography variant="h5">{title}</Typography>
         <Stack direction="row" spacing={2}>
-          <IconButton onClick={() => setNotifications((prev) => !prev)}>
-            {notifications ? (
-              <NotificationsIcon sx={{ color: "#0760A0" }} />
-            ) : (
-              <NotificationsOffIcon />
-            )}
-          </IconButton>
+          <Button
+            onClick={handleMenuOpen}
+            variant="text"
+            endIcon={<KeyboardArrowDownIcon />}
+            sx={{
+              color: "black",
+              textTransform: "none",
+              fontWeight: 500,
+              fontSize: "16px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              "&:hover": {
+                bgcolor: "transparent",
+              },
+            }}
+          >
+            {adminName}
+          </Button>
 
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-            <InputLabel id="demo-simple-select-label">Admin</InputLabel>
-            <Select
-              sx={{ border: "none" }}
-              labelId="demo-simple-select-label"
-              // value={Admin}
-              label="Admin"
+          <Menu
+            anchorEl={select}
+            open={Boolean(select)}
+            onClose={handleClose}
+            PaperProps={{
+              elevation: 3,
+              style: { minWidth: 180, padding: "8px 0" },
+            }}
+          >
+            <Typography sx={{ padding: "8px 16px", fontWeight: 600 }}>
+              {adminName}
+            </Typography>
+            <Divider />
+
+            <MenuItem
+              onClick={() => {
+                setLogoutModal(true);
+                handleClose();
+              }}
+              sx={{ color: "red" }}
             >
-              <MenuItem value="">Ten</MenuItem>
-              <MenuItem value="">Twenty</MenuItem>
-              <MenuItem value="">Thirty</MenuItem>
-            </Select>
-          </FormControl>
+              <LogoutIcon sx={{ marginRight: 1 }} />
+              Logout
+            </MenuItem>
+          </Menu>
         </Stack>
       </Stack>
+
+      <LogoutModal logoutModal={logoutModal} setLogoutModal={setLogoutModal} />
     </>
   );
 }

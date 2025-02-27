@@ -6,7 +6,7 @@ type useSnackbarStoreType = {
   title: string;
   message: string;
   severity: AlertProps["severity"];
-  setSnackbar: (snackbar: Partial<useSnackbarStoreType>) => void;
+  setSnackbar: (args: Omit<useSnackbarStoreType, "setSnackbar">) => void;
 };
 
 export const useSnackbarStore = create<useSnackbarStoreType>()((set) => ({
@@ -14,7 +14,7 @@ export const useSnackbarStore = create<useSnackbarStoreType>()((set) => ({
   title: "",
   message: "",
   severity: "success",
-  setSnackbar(snackbar) {
-    set(snackbar);
+  setSnackbar(toast) {
+    set(toast);
   },
 }));

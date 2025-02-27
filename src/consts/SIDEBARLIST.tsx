@@ -1,22 +1,23 @@
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PieChartIcon from "@mui/icons-material/PieChart";
+import {
+  DashboardIcon,
+  TechnicianIcon,
+  AdminSettingsIcon,
+} from "../assets/sidebarIcons";
+import { SidebarListType } from "../types/SidebarListType";
 
-export const SIDEBARLIST = [
+export const SIDEBARLIST: SidebarListType[][] = [
   [
     {
       id: 0,
       link: "/",
       title: "Dashboard",
-      icon: <PieChartIcon />,
-      roles: ["admin", "distributor"],
+      icon: <DashboardIcon />,
     },
     {
       id: 1,
       link: "/technician",
       title: "Technician",
-      icon: <ManageAccountsIcon />,
-      roles: ["admin"],
+      icon: <TechnicianIcon />,
     },
   ],
   [
@@ -24,8 +25,7 @@ export const SIDEBARLIST = [
       id: 3,
       link: "/settings",
       title: "Profile settings",
-      icon: <SettingsIcon />,
-      roles: ["admin", "distributor"],
+      icon: <AdminSettingsIcon />,
     },
   ],
 ];
