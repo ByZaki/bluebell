@@ -19,13 +19,26 @@ import useStore from "../store/store";
 import { useNavigate } from "react-router";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const login = useStore((state) => state.login);
-
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (email) {
+  //     validateEmail(email, setErrorEmail);
+  //   }
+  // }, [email]);
+
+  // useEffect(() => {
+  //   if (password) {
+  //     validatePassword(password, setErrorPassword);
+  //   }
+  // }, [password]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,7 +49,10 @@ export default function Login() {
     const password = formData.get("password")?.toString() ?? "";
 
     const isValidEmail = validateEmail(email, setErrorEmail);
-    const isValidPassword = validatePassword(password);
+    const isValidPassword = validatePassword(password, setErrorPassword);
+
+    setErrorEmail(!isValidEmail);
+    setErrorPassword(!isValidPassword);
 
     if (!isValidEmail || !isValidPassword) return;
 
@@ -49,19 +65,19 @@ export default function Login() {
     }
   };
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  // const handleMouseDownPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
 
-  const handleMouseUpPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  // const handleMouseUpPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
 
   return (
     <Stack width="100%" direction="row" justifyContent="center">
@@ -94,10 +110,12 @@ export default function Login() {
               type="email"
               variant="outlined"
               label="Email address"
-              onChange={() => {
-                errorEmail && setErrorEmail(false);
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (errorEmail) setErrorEmail(false); // Убираем ошибку при изменении текста
               }}
-              helperText={errorEmail && "Wrong email"}
+              helperText={errorEmail ? "Wrong email" : ""}
               error={errorEmail}
               required
             />
@@ -109,15 +127,15 @@ export default function Login() {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 label="Password"
-                onChange={() => {
-                  errorPassword && setErrorPassword(false);
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errorPassword) setErrorPassword(false); // Убираем ошибку при изменении текста
                 }}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
+                      onClick={() => setShowPassword(!showPassword)}
                       edge="end"
                     >
                       {showPassword ? <VisibilityOff /> : <Visibility />}

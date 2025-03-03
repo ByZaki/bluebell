@@ -1,15 +1,11 @@
 import AuthService from "../services/AuthService";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
-type UserType = {
-  id: number;
-  full_name: string;
-};
+import { UsersType } from "../types/UsersType";
 
 type useStoreType = {
   isAuth: boolean;
-  user: UserType | null;
+  user: UsersType | null;
   setIsAuth: (isAuth: boolean) => void;
   login: (
     email: string,
@@ -33,10 +29,10 @@ const useStore = create<useStoreType>()(
           const response = await AuthService.login(email, password);
           console.log("Auth Response:", response.data);
 
-          const { token, ...userData } = response.data;
+          const { token, data } = response.data;
           localStorage.setItem("token", token);
 
-          set({ user: userData, isAuth: true });
+          set({ user: data, isAuth: true });
 
           return { success: true, message: "OK" };
         } catch (error: any) {

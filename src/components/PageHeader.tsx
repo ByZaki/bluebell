@@ -20,7 +20,7 @@ export default function PageHeader({ title }: ITitle) {
   const [logoutModal, setLogoutModal] = useState<boolean>(false);
   const user = useStore((state) => state.user);
 
-  const adminName = user ? user.data.full_name : "Unknown User";
+  const adminName = user ? user.full_name : "Unknown User";
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setSelect(event.currentTarget);
@@ -83,7 +83,7 @@ export default function PageHeader({ title }: ITitle) {
         </Stack>
       </Stack>
 
-      <LogoutModal logoutModal={logoutModal} setLogoutModal={setLogoutModal} />
+      <LogoutModal show={logoutModal} setShow={setLogoutModal} />
     </>
   );
 }

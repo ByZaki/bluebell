@@ -5,5 +5,5 @@ export type UsersType = {
   shop_id: string;
   email: string;
   date_created: string;
-  status: string;
+  is_blocked: boolean;
 };

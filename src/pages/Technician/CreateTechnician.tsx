@@ -13,7 +13,7 @@ export default function CreateTechnician() {
       setToast({
         show: true,
         title: "success",
-        message: "New user added successfully ",
+        message: "New user has been added successfully ",
         severity: "success",
       });
     } catch (error) {
@@ -21,7 +21,7 @@ export default function CreateTechnician() {
       setToast({
         show: true,
         title: "Error",
-        message: "Failed to create new user. Please try again.",
+        message: "You have failed to create a new user. Please, try it again!",
         severity: "error",
       });
     }
@@ -32,16 +32,6 @@ export default function CreateTechnician() {
       <CustomBreadcrumbs>Create</CustomBreadcrumbs>
       <PageHeader title="Create" />
       <ComponentTechnician onSubmit={handleAdd} />
-
-      {/* {success ? (
-        <Alert variant="outlined" severity="success">
-          New user has been successfully created.
-        </Alert>
-      ) : (
-        <Alert variant="outlined" severity="error">
-          Failed to create new user. Please try again.
-        </Alert>
-      )} */}
     </>
   );
 }

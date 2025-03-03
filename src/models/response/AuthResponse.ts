@@ -1,6 +1,6 @@
-import { IUser } from "../IUser";
+import { UsersType } from "../../types/UsersType";
 
 export interface AuthResponse {
   token: string;
-  user: IUser;
+  data: UsersType;
 }

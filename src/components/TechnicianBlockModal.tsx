@@ -1,26 +1,26 @@
 import { Button, Stack } from "@mui/material";
-import { useNavigate } from "react-router";
-import useStore from "../store/store";
 import CustomModal from "./CustomModal";
 
-type LogoutModalType = {
-  show: boolean;
-  setShow: (bool: boolean) => void;
-};
-
-export default function LogoutModal({ show, setShow }: LogoutModalType) {
-  const navigate = useNavigate();
-
+export default function TechnicianBlockModal({
+  show,
+  setShow,
+  selectedUser,
+  handleBlockToggle,
+}: any) {
   const handleClose = () => {
     setShow(false);
   };
+
+  if (!selectedUser) return null;
 
   return (
     <>
       <CustomModal
         show={show}
-        title="Log Out"
-        text="Are you sure you want to logout?"
+        title={selectedUser.is_blocked ? "Unblock User" : "Block User"}
+        text={`Are you sure you want to ${
+          selectedUser.is_blocked ? "unblock" : "block"
+        } ${selectedUser.full_name}?`}
         handleClose={handleClose}
       >
         <Stack direction="row" alignItems="center" spacing={1.5}>
@@ -41,20 +41,14 @@ export default function LogoutModal({ show, setShow }: LogoutModalType) {
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color={selectedUser.is_blocked ? "success" : "error"}
             size="large"
             sx={{
               width: "50%",
             }}
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("navigationStore");
-              localStorage.removeItem("authStore");
-              useStore.getState().setIsAuth(false);
-              navigate("/login");
-            }}
+            onClick={handleBlockToggle}
           >
-            Logout
+            {selectedUser.is_blocked ? "Unblock" : "Block"}
           </Button>
         </Stack>
       </CustomModal>

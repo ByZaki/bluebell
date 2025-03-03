@@ -4,7 +4,6 @@ import { IMaskInput } from "react-imask";
 import { useNavigate } from "react-router";
 import { validateEmail, validatePhone } from "../../utils";
 import { validateLength } from "../../utils/ValidateName";
-// import { validatePhone } from "../../utils/validatePhone";
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -13,7 +12,7 @@ interface CustomProps {
 
 interface ComponentTechnicianProps {
   onSubmit: (data: any) => void;
-  value?: any; // ✅ Принимаем данные для редактирования
+  value?: any;
 }
 
 const TextMaskCustom = React.forwardRef<HTMLInputElement, CustomProps>(
@@ -24,7 +23,7 @@ const TextMaskCustom = React.forwardRef<HTMLInputElement, CustomProps>(
         {...other}
         mask="+998 ## ### ## ##"
         definitions={{
-          "#": /[1-9]/,
+          "#": /[0-9]/,
         }}
         inputRef={ref}
         onAccept={(value: any) =>
@@ -50,7 +49,7 @@ export default function ComponentTechnician({
 }: ComponentTechnicianProps) {
   const [values, setValues] = useState({
     full_name: value?.full_name || "",
-    textmask: value?.phone_number || "+0 000 000 0000",
+    textmask: value?.phone_number || "+998 00 000 00 00",
     email: value?.email || "",
   });
 

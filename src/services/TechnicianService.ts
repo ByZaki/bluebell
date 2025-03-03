@@ -48,18 +48,20 @@ export const editTechnicianService = async (
   }
 };
 
+export const toggleBlockTechnician = async (id: number, isBlocked: boolean) => {
+  try {
+    const response = await $axios.patch(`users/${id}`, {
+      is_blocked: !isBlocked,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // export const blockTechnicianService = async (id: number) => {
 //   try {
-//     const response = await $axios.post(`/users/block/${id}/`);
-//     return response.data;
-//   } catch (err) {
-//     throw err;
-//   }
-// };
-
-// export const unblockTechnicianService = async (id: number) => {
-//   try {
-//     const response = await $axios.post(`/users/unblock/${id}/`);
+//     const response = await $axios.post(`/users/${id}/`);
 //     return response.data;
 //   } catch (err) {
 //     throw err;

@@ -7,9 +7,12 @@ import {
 } from "../../services/TechnicianService";
 import ComponentTechnician from "./ComponentTechnician";
 import { useEffect, useState } from "react";
+import { useSnackbarStore } from "../../store/useSnackbarStore";
 
 export default function EditTechnician() {
   const { id } = useParams();
+  const setToast = useSnackbarStore((store) => store.setSnackbar);
+
   const technicianId = Number(id) || 0;
 
   const [user, setUser] = useState(null);
@@ -31,9 +34,19 @@ export default function EditTechnician() {
     try {
       if (technicianId === undefined) return;
       await editTechnicianService(formData, technicianId);
-      console.log("success");
+      setToast({
+        show: true,
+        title: "success",
+        message: "This user has been successfully modified!",
+        severity: "success",
+      });
     } catch (error) {
-      console.log(error);
+      setToast({
+        show: true,
+        title: "Error",
+        message: "this user has not been modified. Please, try it again!",
+        severity: "error",
+      });
     }
   };
 

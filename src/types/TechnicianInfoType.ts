@@ -5,5 +5,5 @@ export type TechnicianInfo = {
   phone_number: string;
   shop_id: string;
   date_created: string;
-  status: string;
+  isBlocked: boolean;
 };

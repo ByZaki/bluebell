@@ -19,10 +19,14 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-import { getTechnicianService } from "../../services/TechnicianService";
+import {
+  getTechnicianService,
+  toggleBlockTechnician,
+} from "../../services/TechnicianService";
 import { UsersType } from "../../types/UsersType";
 import { useNavigate } from "react-router";
 import debounce from "debounce";
+import TechnicianBlockModal from "../../components/TechnicianBlockModal";
 
 export default function Technician() {
   const [users, setUsers] = useState<UsersType[]>([]);
@@ -30,8 +34,29 @@ export default function Technician() {
   const [totalPages, setTotalPages] = useState(1);
   const [limitPage, setLimitPage] = useState(10);
   const [searchValue, setSearchValue] = useState("");
+  const [blockModal, setBlockModal] = useState<boolean>(false);
+  const [selectedUser, setSelectedUser] = useState<UsersType | null>(null);
 
   const navigate = useNavigate();
+
+  const handleBlockToggle = async () => {
+    if (!selectedUser) return;
+
+    try {
+      await toggleBlockTechnician(selectedUser.id, selectedUser.is_blocked);
+      setUsers((prev) =>
+        prev.map((user) =>
+          user.id === selectedUser.id
+            ? { ...user, is_blocked: !user.is_blocked }
+            : user
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setBlockModal(false);
+    }
+  };
 
   const technicianGetData = async () => {
     try {
@@ -146,40 +171,26 @@ export default function Technician() {
                       >
                         View
                       </Button>
-                      {user.status === "Blocked" ? (
-                        <Button
-                          variant="outlined"
-                          // onClick={user.status === "Unblocked"}
-                          sx={{
-                            textTransform: "none",
-                            minWidth: "85px",
-                            color: "#0797A0",
-
-                            borderColor: "#0797A0",
-                            "&:hover": {
-                              backgroundColor: "#0797A04D",
-                            },
-                          }}
-                        >
-                          Unblock
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outlined"
-                          color="error"
-                          sx={{
-                            textTransform: "none",
-                            minWidth: "85px",
-                            color: "#DB3E3F",
-                            borderColor: "#DB3E3F",
-                            "&:hover": {
-                              bgcolor: "#DB3E3F4D",
-                            },
-                          }}
-                        >
-                          Block
-                        </Button>
-                      )}
+                      <Button
+                        variant="outlined"
+                        onClick={() => {
+                          setSelectedUser(user);
+                          setBlockModal(true);
+                        }}
+                        sx={{
+                          textTransform: "none",
+                          minWidth: "85px",
+                          color: user.is_blocked ? "#0797A0" : "#DB3E3F",
+                          borderColor: user.is_blocked ? "#0797A0" : "#DB3E3F",
+                          "&:hover": {
+                            bgcolor: user.is_blocked
+                              ? "#0797A04D"
+                              : "#DB3E3F4D",
+                          },
+                        }}
+                      >
+                        {user.is_blocked ? "Unblock" : "Block"}
+                      </Button>
                     </Stack>
                   </TableCell>
                 </TableRow>
@@ -223,6 +234,60 @@ export default function Technician() {
           </Select>
         </FormControl>
       </Stack>
+
+      <TechnicianBlockModal
+        show={blockModal}
+        setShow={setBlockModal}
+        selectedUser={selectedUser}
+        handleBlockToggle={handleBlockToggle}
+      />
+
+      {/* <CustomModal
+        show={logoutModal}
+        title={selectedUser.is_blocked ? "Unblock User" : "Block User"}
+        text={`Are you sure you want to ${
+          selectedUser.is_blocked ? "unblock" : "block"
+        } ${selectedUser.full_name}?`}
+        handleClose={handleClose}
+        // setLogoutModal={setLogoutModal}
+        // logoutModal={logoutModal}
+        // title={selectedUser.is_blocked ? "Unblock User" : "Block User"}
+        // text={`Are you sure you want to ${
+        //   selectedUser.is_blocked ? "unblock" : "block"
+        // } ${selectedUser.full_name}?`}
+        // children={selectedUser.is_blocked ? "Unblock" : "Block"}
+      >
+        <Stack direction="row" alignItems="center" spacing={1.5}>
+          <Button
+            variant="outlined"
+            size="large"
+            sx={{
+              width: "50%",
+              color: "#000",
+              borderColor: "#E0E4E7",
+              "&:hover": {
+                bgcolor: "#E0E4E74D",
+              },
+            }}
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            size="large"
+            sx={{
+              width: "50%",
+            }}
+            onClick={() => {
+              selectedUser.is_blocked ? "Unblock" : "Block";
+            }}
+          >
+            Logout
+          </Button>
+        </Stack>
+      </CustomModal> */}
     </>
   );
 }
