@@ -9,6 +9,7 @@ import {
   getOneUserSettingService,
   updateUserSettingService,
 } from "../services/SettingsService";
+import useStore from "../store/store";
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -22,9 +23,7 @@ const TextMaskCustom = React.forwardRef<HTMLInputElement, CustomProps>(
       <IMaskInput
         {...other}
         mask="+998 ## ### ## ##"
-        definitions={{
-          "#": /[0-9]/,
-        }}
+        definitions={{ "#": /[0-9]/ }}
         inputRef={ref}
         onAccept={(value: any) =>
           onChange({ target: { name: props.name, value } })
@@ -37,12 +36,14 @@ const TextMaskCustom = React.forwardRef<HTMLInputElement, CustomProps>(
 
 export default function Settings() {
   const setToast = useSnackbarStore((store) => store.setSnackbar);
+  const user = useStore((state) => state.user);
+  const userId = user ? user.id : null;
 
   const [settingId, setSettingId] = useState<number | null>(null);
-  const [user, setUser] = useState({
-    full_name: "",
-    textmask: "",
-    email: "",
+  const [formData, setFormData] = useState({
+    full_name: user?.full_name || "",
+    phone_number: user?.phone_number || "",
+    email: user?.email || "",
   });
 
   const [errorEmail, setErrorEmail] = useState(false);
@@ -50,39 +51,27 @@ export default function Settings() {
   const [errorName, setErrorName] = useState(false);
 
   useEffect(() => {
-    const authStore = localStorage.getItem("authStore");
-    if (authStore) {
-      try {
-        const parsedStore = JSON.parse(authStore);
-        const userId = parsedStore?.state?.user?.data?.id;
-
-        if (userId) {
+    const fetchUserSettings = async () => {
+      if (userId) {
+        try {
           setSettingId(userId);
-          const data = async () => {
-            try {
-              const response = await getOneUserSettingService(userId);
-              setUser({
-                full_name: response.full_name,
-                textmask: response.phone_number,
-                email: response.email,
-              });
-            } catch (error) {
-              console.log(error);
-            }
-          };
-          data();
+          const response = await getOneUserSettingService(userId);
+          if (response) {
+            setFormData(response);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, []);
+    };
+
+    fetchUserSettings();
+  }, [userId]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({
-      ...user,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     setErrorEmail(false);
     setErrorPhone(false);
     setErrorName(false);
@@ -91,23 +80,17 @@ export default function Settings() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    const data = {
-      full_name: user.full_name,
-      phone_number: user.textmask,
-      email: user.email,
-    };
-
-    const isValidName = validateLength(data.full_name, setErrorName);
-    const isValidEmail = validateEmail(data.email, setErrorEmail);
-    const isValidPhone = validatePhone(data.phone_number, setErrorPhone);
+    const isValidName = validateLength(formData.full_name, setErrorName);
+    const isValidEmail = validateEmail(formData.email, setErrorEmail);
+    const isValidPhone = validatePhone(formData.phone_number, setErrorPhone);
 
     if (!isValidName || !isValidPhone || !isValidEmail || !settingId) return;
 
     try {
-      await updateUserSettingService(settingId, data);
+      await updateUserSettingService(settingId, formData);
       setToast({
         show: true,
-        title: "success",
+        title: "Success",
         message: "This user has been successfully modified!",
         severity: "success",
       });
@@ -115,94 +98,77 @@ export default function Settings() {
       setToast({
         show: true,
         title: "Error",
-        message: "this user has not been modified. Please, try it again!",
+        message: "This user has not been modified. Please, try again!",
         severity: "error",
       });
     }
   };
 
   return (
-    <>
+    <Stack>
+      <CustomBreadcrumbs>Settings</CustomBreadcrumbs>
+      <PageHeader title="Settings" />
       <Stack>
-        <CustomBreadcrumbs>Settings</CustomBreadcrumbs>
+        <Box width="660px">
+          <form onSubmit={handleSubmit}>
+            <Stack gap="15px" marginY="25px">
+              <FormControl fullWidth>
+                <TextField
+                  id="full_name"
+                  type="text"
+                  name="full_name"
+                  label="Full name"
+                  value={formData.full_name}
+                  onChange={handleChange}
+                  helperText={errorName && "Wrong name"}
+                  error={errorName}
+                  required
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <TextField
+                  label="Phone number"
+                  value={formData.phone_number}
+                  onChange={handleChange}
+                  name="phone_number"
+                  id="formatted-text-mask-input"
+                  helperText={errorPhone && "Wrong phone number"}
+                  error={errorPhone}
+                  InputProps={{
+                    inputComponent: TextMaskCustom as any,
+                  }}
+                />
+              </FormControl>
+              <FormControl fullWidth>
+                <TextField
+                  id="email"
+                  type="text"
+                  name="email"
+                  label="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  helperText={errorEmail && "Wrong email"}
+                  error={errorEmail}
+                />
+              </FormControl>
+            </Stack>
 
-        <PageHeader title="Settings" />
-
-        <Stack>
-          <Box width="660px">
-            <form onSubmit={handleSubmit}>
-              <Stack gap="15px" marginY="25px">
-                <FormControl fullWidth>
-                  <TextField
-                    id="full_name"
-                    type="text"
-                    name="full_name"
-                    label="Full name"
-                    value={user.full_name}
-                    onChange={handleChange}
-                    helperText={errorName && "Wrong name"}
-                    error={errorName}
-                    required
-                  />
-                </FormControl>
-                <FormControl fullWidth>
-                  <TextField
-                    label="Phone number"
-                    value={user.textmask}
-                    onChange={handleChange}
-                    name="textmask"
-                    id="formatted-text-mask-input"
-                    helperText={errorPhone && "Wrong phone number"}
-                    error={errorPhone}
-                    slotProps={{
-                      input: () => {
-                        return { inputComponent: TextMaskCustom as any };
-                      },
-                    }}
-                  />
-                </FormControl>
-                <FormControl fullWidth>
-                  <TextField
-                    id="email"
-                    type="text"
-                    name="email"
-                    label="Email"
-                    value={user.email}
-                    onChange={handleChange}
-                    helperText={errorEmail && "Wrong email"}
-                    error={errorEmail}
-                  />
-                </FormControl>
-              </Stack>
-
-              <Button
-                type="submit"
-                size="large"
-                variant="contained"
-                sx={{
-                  paddingY: "14px",
-                  minWidth: "208px",
-                  display: "flex",
-                  gap: "10px",
-                }}
-              >
-                Save
-              </Button>
-            </form>
-          </Box>
-        </Stack>
+            <Button
+              type="submit"
+              size="large"
+              variant="contained"
+              sx={{
+                paddingY: "14px",
+                minWidth: "208px",
+                display: "flex",
+                gap: "10px",
+              }}
+            >
+              Save
+            </Button>
+          </form>
+        </Box>
       </Stack>
-    </>
+    </Stack>
   );
 }
-
-// export default function ComponentTechnician({
-//   onSubmit,
-//   value,
-// }: ComponentTechnicianProps) {
-//   const [values, setValues] = useState({
-//     full_name: value?.full_name,
-//     textmask: value?.phone_number,
-//     email: value?.email,
-//   });
-// }

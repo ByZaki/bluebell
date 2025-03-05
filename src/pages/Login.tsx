@@ -28,18 +28,6 @@ export default function Login() {
   const login = useStore((state) => state.login);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (email) {
-  //     validateEmail(email, setErrorEmail);
-  //   }
-  // }, [email]);
-
-  // useEffect(() => {
-  //   if (password) {
-  //     validatePassword(password, setErrorPassword);
-  //   }
-  // }, [password]);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -51,33 +39,20 @@ export default function Login() {
     const isValidEmail = validateEmail(email, setErrorEmail);
     const isValidPassword = validatePassword(password, setErrorPassword);
 
-    setErrorEmail(!isValidEmail);
-    setErrorPassword(!isValidPassword);
-
-    if (!isValidEmail || !isValidPassword) return;
+    if (!isValidEmail || !isValidPassword) {
+      setErrorEmail(!isValidEmail);
+      setErrorPassword(!isValidPassword);
+      return;
+    }
 
     const { success, message } = await login(email, password);
 
-    console.log(message);
+    console.log("Login response:", { success, message });
 
     if (success) {
       navigate("/");
     }
   };
-
-  // const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  // const handleMouseDownPassword = (
-  //   event: React.MouseEvent<HTMLButtonElement>
-  // ) => {
-  //   event.preventDefault();
-  // };
-
-  // const handleMouseUpPassword = (
-  //   event: React.MouseEvent<HTMLButtonElement>
-  // ) => {
-  //   event.preventDefault();
-  // };
 
   return (
     <Stack width="100%" direction="row" justifyContent="center">
@@ -113,7 +88,7 @@ export default function Login() {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                if (errorEmail) setErrorEmail(false); // Убираем ошибку при изменении текста
+                if (errorEmail) setErrorEmail(false);
               }}
               helperText={errorEmail ? "Wrong email" : ""}
               error={errorEmail}
@@ -130,7 +105,7 @@ export default function Login() {
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
-                  if (errorPassword) setErrorPassword(false); // Убираем ошибку при изменении текста
+                  if (errorPassword) setErrorPassword(false);
                 }}
                 endAdornment={
                   <InputAdornment position="end">
@@ -157,12 +132,12 @@ export default function Login() {
           </Stack>
         </Stack>
 
-        <Stack direction="row" spacing={2} sx={{ justifyContent: "center" }}>
-          <Link href="#" underline="none">
+        <Stack direction="row" spacing={1} justifyContent="center">
+          <Link href="/term-of-use" target="_blank" underline="none">
             Terms of use
           </Link>
-          <Typography>|</Typography>
-          <Link href="#" underline="none">
+          <Typography sx={{ mx: 1 }}>|</Typography>
+          <Link href="/privacy" target="_blank" underline="none">
             Privacy policy
           </Link>
         </Stack>

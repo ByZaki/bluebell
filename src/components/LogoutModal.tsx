@@ -48,7 +48,6 @@ export default function LogoutModal({ show, setShow }: LogoutModalType) {
             }}
             onClick={() => {
               localStorage.removeItem("token");
-              localStorage.removeItem("navigationStore");
               localStorage.removeItem("authStore");
               useStore.getState().setIsAuth(false);
               navigate("/login");

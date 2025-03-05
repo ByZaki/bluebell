@@ -13,7 +13,7 @@ export default function CustomBreadcrumbs({ children }: IChildren) {
           <Link style={{ textDecoration: "none", color: "inherit" }} to="/">
             Home
           </Link>
-          <Typography sx={{ color: "text.primary" }}>{children}</Typography>
+          <Typography sx={{ color: "#0760A0" }}>{children}</Typography>
         </Breadcrumbs>
       </Stack>
     </>

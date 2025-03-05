@@ -33,7 +33,11 @@ export default function PageHeader({ title }: ITitle) {
   return (
     <>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Typography variant="h5">{title}</Typography>
+        <Typography
+          sx={{ fontSize: "24px", fontWeight: 700, color: "#1F2128" }}
+        >
+          {title}
+        </Typography>
         <Stack direction="row" spacing={2}>
           <Button
             onClick={handleMenuOpen}
