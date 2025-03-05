@@ -6,7 +6,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  Link,
+  // Link,
   OutlinedInput,
   Stack,
   TextField,
@@ -16,7 +16,7 @@ import { useState } from "react";
 import logo from "@assets/logo.svg";
 import { validateEmail, validatePassword } from "../utils";
 import useStore from "../store/store";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -63,9 +63,7 @@ export default function Login() {
         alignItems="center"
         paddingY="20px"
       >
-        <Link href="/#" variant="h5" color="primary" underline="none">
-          <img src={logo} alt="Logo" />
-        </Link>
+        <img src={logo} alt="Logo" />
 
         <Stack width="100%" alignItems="center" spacing={2}>
           <Typography variant="h5" component="h2">
@@ -133,11 +131,27 @@ export default function Login() {
         </Stack>
 
         <Stack direction="row" spacing={1} justifyContent="center">
-          <Link href="/term-of-use" target="_blank" underline="none">
+          <Link
+            to="/term-of-use"
+            target="_blank"
+            style={{
+              color: "#265B82",
+              textDecoration: "none",
+              fontSize: "14px",
+            }}
+          >
             Terms of use
           </Link>
           <Typography sx={{ mx: 1 }}>|</Typography>
-          <Link href="/privacy" target="_blank" underline="none">
+          <Link
+            to="/privacy"
+            target="_blank"
+            style={{
+              color: "#265B82",
+              textDecoration: "none",
+              fontSize: "14px",
+            }}
+          >
             Privacy policy
           </Link>
         </Stack>
