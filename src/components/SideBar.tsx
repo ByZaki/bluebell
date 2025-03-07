@@ -1,6 +1,6 @@
 import SideLogo from "@assets/SideLogo.svg";
 import { SIDEBARLIST } from "../consts/SIDEBARLIST";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useNavigationStore } from "../store/useNavigationStore";
 import { SidebarListType } from "../types/SidebarListType";

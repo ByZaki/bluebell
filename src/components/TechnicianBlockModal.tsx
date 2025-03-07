@@ -1,12 +1,13 @@
 import { Button, Stack } from "@mui/material";
 import CustomModal from "./CustomModal";
+import { TechnicianBlockModalType } from "../types/TechnicianBlockModalType";
 
 export default function TechnicianBlockModal({
   show,
   setShow,
   selectedUser,
   handleBlockToggle,
-}: any) {
+}: TechnicianBlockModalType) {
   const handleClose = () => {
     setShow(false);
   };

@@ -6,7 +6,6 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
-  // Link,
   OutlinedInput,
   Stack,
   TextField,
@@ -16,7 +15,7 @@ import { useState } from "react";
 import logo from "@assets/logo.svg";
 import { validateEmail, validatePassword } from "../utils";
 import useStore from "../store/store";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -26,7 +25,6 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const login = useStore((state) => state.login);
-  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,10 +46,6 @@ export default function Login() {
     const { success, message } = await login(email, password);
 
     console.log("Login response:", { success, message });
-
-    if (success) {
-      navigate("/");
-    }
   };
 
   return (

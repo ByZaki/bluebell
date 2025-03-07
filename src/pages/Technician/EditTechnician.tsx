@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import CustomBreadcrumbs from "../../components/CustomBreadcrumbs";
 import PageHeader from "../../components/PageHeader";
 import {

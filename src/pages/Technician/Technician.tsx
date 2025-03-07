@@ -24,7 +24,7 @@ import {
   toggleBlockTechnician,
 } from "../../services/TechnicianService";
 import { UsersType } from "../../types/UsersType";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import debounce from "debounce";
 import TechnicianBlockModal from "../../components/TechnicianBlockModal";
 

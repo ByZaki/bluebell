@@ -1,15 +1,8 @@
 import { Box, Fade, Modal, Typography } from "@mui/material";
-import { FC, ReactElement } from "react";
+import { FC } from "react";
+import { CustomModalPropsType } from "../types/CustomModalPropsType";
 
-type CustomModalProps = {
-  show: boolean;
-  title: string;
-  text?: string;
-  handleClose: () => void;
-  children: ReactElement;
-};
-
-const CustomModal: FC<CustomModalProps> = ({
+const CustomModal: FC<CustomModalPropsType> = ({
   show = false,
   title,
   text,

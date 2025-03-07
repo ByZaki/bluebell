@@ -1,5 +1,5 @@
 import { Breadcrumbs, Stack, Typography } from "@mui/material";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 interface IChildren {
   children: string;

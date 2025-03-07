@@ -1,12 +1,8 @@
 import { Button, Stack } from "@mui/material";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import useStore from "../store/store";
 import CustomModal from "./CustomModal";
-
-type LogoutModalType = {
-  show: boolean;
-  setShow: (bool: boolean) => void;
-};
+import { LogoutModalType } from "../types/LogoutModalType";
 
 export default function LogoutModal({ show, setShow }: LogoutModalType) {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { RouterProvider } from "react-router";
+import { RouterProvider } from "react-router-dom";
 import useStore from "../store/store";
 import PrivateRoutes from "./PrivateRoutes";
 import PublicRoutes from "./PublicRoutes";
@@ -6,5 +6,10 @@ import PublicRoutes from "./PublicRoutes";
 export default function Routing() {
   const auth = useStore((state) => state.isAuth);
 
-  return <RouterProvider router={auth ? PrivateRoutes : PublicRoutes} />;
+  return (
+    <RouterProvider
+      key={auth ? "private" : "public"}
+      router={auth ? PrivateRoutes : PublicRoutes}
+    />
+  );
 }

@@ -1,7 +1,7 @@
 import { Box, Button, FormControl, Stack, TextField } from "@mui/material";
 import React, { FormEvent, useEffect, useState } from "react";
 import { IMaskInput } from "react-imask";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePhone } from "../../utils";
 import { validateLength } from "../../utils/ValidateName";
 

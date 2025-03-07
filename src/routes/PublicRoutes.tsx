@@ -1,10 +1,11 @@
-import { createBrowserRouter, Navigate } from "react-router";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import TermOfUse from "../pages/TermOfUse";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 
 const PublicRoutes = createBrowserRouter([
   {
+    index: true,
     path: "/login",
     element: <Login />,
   },
