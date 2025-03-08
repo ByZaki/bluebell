@@ -5,11 +5,6 @@ import Settings from "../pages/Settings";
 import MainLayout from "../layouts/MainLayout";
 import CreateTechnician from "../pages/Technician/CreateTechnician";
 import EditTechnician from "../pages/Technician/EditTechnician";
-// import useStore from "../store/store";
-
-// const ProtectedRoute = () => {
-//   const auth = useStore((state) => state.isAuth);
-// };
 
 const PrivateRoutes = createBrowserRouter([
   {
