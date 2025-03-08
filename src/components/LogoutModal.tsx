@@ -11,6 +11,16 @@ export default function LogoutModal({ show, setShow }: LogoutModalType) {
     setShow(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("authStore");
+
+    setTimeout(() => {
+      useStore.getState().setIsAuth(false);
+      navigate("/login", { replace: true });
+    }, 100);
+  };
+
   return (
     <>
       <CustomModal
@@ -42,12 +52,7 @@ export default function LogoutModal({ show, setShow }: LogoutModalType) {
             sx={{
               width: "50%",
             }}
-            onClick={() => {
-              localStorage.removeItem("token");
-              localStorage.removeItem("authStore");
-              useStore.getState().setIsAuth(false);
-              navigate("/login");
-            }}
+            onClick={handleLogout}
           >
             Logout
           </Button>

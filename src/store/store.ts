@@ -41,6 +41,7 @@ const useStore = create<useStoreType>()(
       },
       logout: () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("authStore");
         set({ isAuth: false, user: null });
       },
     }),
