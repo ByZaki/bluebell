@@ -58,12 +58,3 @@ export const toggleBlockTechnician = async (id: number, isBlocked: boolean) => {
     console.log(error);
   }
 };
-
-// export const blockTechnicianService = async (id: number) => {
-//   try {
-//     const response = await $axios.post(`/users/${id}/`);
-//     return response.data;
-//   } catch (err) {
-//     throw err;
-//   }
-// };

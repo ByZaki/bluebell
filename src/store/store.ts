@@ -34,9 +34,9 @@ const useStore = create<useStoreType>()(
 
           set({ user: data, isAuth: true });
 
-          return { success: true, message: "OK" };
+          return { success: true, message: "You have successfully signed in!" };
         } catch (error: any) {
-          return { success: false, message: "Email or password wrong" };
+          return { success: false, message: "Wrong email or password!" };
         }
       },
       logout: () => {

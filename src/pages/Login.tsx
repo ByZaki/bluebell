@@ -16,6 +16,7 @@ import logo from "@assets/logo.svg";
 import { validateEmail, validatePassword } from "../utils";
 import useStore from "../store/store";
 import { Link } from "react-router-dom";
+import { useSnackbarStore } from "../store/useSnackbarStore";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,6 +24,8 @@ export default function Login() {
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const setToast = useSnackbarStore((store) => store.setSnackbar);
 
   const login = useStore((state) => state.login);
 
@@ -45,7 +48,21 @@ export default function Login() {
 
     const { success, message } = await login(email, password);
 
-    console.log("Login response:", { success, message });
+    if (success) {
+      setToast({
+        show: true,
+        title: "success",
+        message,
+        severity: "success",
+      });
+    } else {
+      setToast({
+        show: true,
+        title: "error",
+        message,
+        severity: "error",
+      });
+    }
   };
 
   return (
